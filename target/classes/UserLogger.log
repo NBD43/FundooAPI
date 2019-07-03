@@ -1,0 +1,37 @@
+2019-07-01 19:32:26.086  INFO 30775 --- [main] c.b.f.FundooNoteFullBackEndApplication   : Starting FundooNoteFullBackEndApplication on bridgeit-desktop with PID 30775 (/home/bridgeit/Downloads/Week1_programs-master/BridgeLabz/FundooNoteFullBackEnd/target/classes started by bridgeit in /home/bridgeit/Downloads/Week1_programs-master/BridgeLabz/FundooNoteFullBackEnd)
+2019-07-01 19:32:26.087  INFO 30775 --- [main] c.b.f.FundooNoteFullBackEndApplication   : No active profile set, falling back to default profiles: default
+2019-07-01 19:32:26.760  INFO 30775 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-07-01 19:32:26.802  INFO 30775 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 37ms. Found 1 repository interfaces.
+2019-07-01 19:32:27.002  INFO 30775 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$4d7b0285] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-01 19:32:27.191  INFO 30775 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-07-01 19:32:27.207  INFO 30775 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-07-01 19:32:27.207  INFO 30775 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.17]
+2019-07-01 19:32:27.271  INFO 30775 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-07-01 19:32:27.271  INFO 30775 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1158 ms
+2019-07-01 19:32:27.381  INFO 30775 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-07-01 19:32:27.443  INFO 30775 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-07-01 19:32:27.472  INFO 30775 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-07-01 19:32:27.503  INFO 30775 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.9.Final}
+2019-07-01 19:32:27.504  INFO 30775 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-07-01 19:32:27.603  INFO 30775 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-07-01 19:32:27.669  INFO 30775 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2019-07-01 19:32:28.017  INFO 30775 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-07-01 19:32:28.456  WARN 30775 --- [main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-07-01 19:32:28.548  INFO 30775 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2019-07-01 19:32:28.663  INFO 30775 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-01 19:32:28.802  INFO 30775 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-07-01 19:32:28.812  INFO 30775 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-07-01 19:32:28.829  INFO 30775 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-07-01 19:32:28.949  INFO 30775 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-07-01 19:32:28.952  INFO 30775 --- [main] c.b.f.FundooNoteFullBackEndApplication   : Started FundooNoteFullBackEndApplication in 3.074 seconds (JVM running for 3.42)
+2019-07-01 19:32:39.397  INFO 30775 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-01 19:32:39.398  INFO 30775 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-07-01 19:32:39.404  INFO 30775 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2019-07-01 19:32:39.463  INFO 30775 --- [http-nio-8080-exec-2] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-07-01 19:41:31.356  INFO 30775 --- [RMI TCP Connection(16)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2019-07-01 19:41:31.359  INFO 30775 --- [RMI TCP Connection(16)-127.0.0.1] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019-07-01 19:41:31.360  INFO 30775 --- [RMI TCP Connection(16)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2019-07-01 19:41:31.363  INFO 30775 --- [RMI TCP Connection(16)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2019-07-01 19:41:31.368  INFO 30775 --- [RMI TCP Connection(16)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
