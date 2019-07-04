@@ -127,16 +127,26 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Response forgetPassword(String emailId) throws UserException, UnsupportedEncodingException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> alreadyPresent=userRepo.findByEmailId(emailId);
+		if(!alreadyPresent.isPresent()) {
+			throw new UserException(401,environment.getProperty("user.forgetPassword.emailId"));
+		}
+		long id=alreadyPresent.get().getUserId();
+		Utility.send(emailId, "password reset mail", Utility.getUrl(id));
+		return ResponseHelper.statusResponse(200, environment.getProperty("user.forgetpassword.link"));
 	}
 
 
 
 	@Override
 	public Response resetPaswords(String token, String password) throws UserException {
-		// TODO Auto-generated method stub
-		return null;
+		long id=tokenUtil.decodeToken(token);
+		User user=userRepo.findById(id).orElseThrow(()-> new UserException(404,environment.getProperty("user.resetpassword.user")));
+		String encodedPasword=passwordEncoder.encode(password);
+		user.setPassword(encodedPasword);
+		userRepo.save(user);
+		
+		return ResponseHelper.statusResponse(200, "password successfully reset");
 	}
 
 	

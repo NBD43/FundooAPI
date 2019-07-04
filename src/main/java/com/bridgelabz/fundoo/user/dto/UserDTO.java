@@ -1,14 +1,21 @@
 package com.bridgelabz.fundoo.user.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 import lombok.Data;
 
 @Data
 public class UserDTO {
-
+	
+	@NotEmpty(message = "Please provide firstName")
 	private String firstName;
+	@NotEmpty(message = "Please provide lastName")
 	private String lastName;
+	@NotEmpty(message = "Please provide emailId")
 	private String emailId;
+	@NotEmpty(message = "Please provide password")
 	private String password;
+	@NotEmpty(message = "Please provide mobileNumber")
 	private String mobileNum;
 	public String getFirstName() {
 		return firstName;

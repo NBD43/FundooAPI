@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.bridgelabz.fundoo.note.dto.NotesDto;
+import com.bridgelabz.fundoo.note.model.Note;
+
 import lombok.Data;
 
 @Entity
@@ -28,6 +31,8 @@ public class User {
 	private String mobileNum;
 	private boolean isVerify;
 	private LocalDateTime registerDate = LocalDateTime.now();
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Note> notes;
 
 	public Long getUserId() {
 		return userId;
@@ -92,5 +97,15 @@ public class User {
 	public void setRegisterDate(LocalDateTime registerDate) {
 		this.registerDate = registerDate;
 	}
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
+	
 
 }
