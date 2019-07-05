@@ -11,7 +11,7 @@ import com.bridgelabz.fundoo.response.Response;
 public interface NotesService {
 
 	public Response createNote(NotesDto notesDto, String token);
-
+	
 	public Response updateNote(NotesDto notesDto, String token, long noteId);
 
 	public Response delete(String token, long noteId);

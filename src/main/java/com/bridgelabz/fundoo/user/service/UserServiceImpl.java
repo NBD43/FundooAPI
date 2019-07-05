@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 	
 	public ResponseToken onLogin(LoginDTO loginDto) {
 		// extract user details by using emailid
+		//long userId = tokenUtil.decodeToken(token);
 		Optional<User> user = userRepo.findByEmailId(loginDto.getEmailId());
 		System.out.println(user);
 		ResponseToken response = new ResponseToken();
@@ -102,6 +103,7 @@ public class UserServiceImpl implements UserService {
 			if (status == true) {
 				System.out.println("logged in");
 				String token = tokenUtil.createToken(user.get().getUserId());
+				System.out.println(token);
 				response.setToken(token);
 				response.setStatusCode(200);
 				response.setStatusMessage(environment.getProperty("user.login"));
