@@ -134,34 +134,101 @@ public class NoteServiceImpl implements NotesService {
 
 	@Override
 	public Response pinAndUnPin(String token, long noteId) {
-		// TODO Auto-generated method stub
-		return null;
+		long id =userToken.decodeToken(token);
+		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
+		if(notes==null) {
+			throw new UserException(-5,"Invalid input");
+		}
+		if(notes.isPined()==false) {
+			notes.setPined(true);
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.pinned"));
+			return response;
+		}else {
+			notes.setPined(false);
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.unpinned"));
+			return response;
+		
+		}
 	}
            
 	@Override
 	public Response archiveAndUnArchive(String token, long noteId) {
-		// TODO Auto-generated method stub
-		return null;
+		long id =userToken.decodeToken(token);
+		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
+		if(notes==null) {
+			throw new UserException(-5,"Invalid input");
+		}
+		if(notes.isArchived()==false) {
+			notes.setArchived(true);;
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.archieved"));
+			return response;
+		}else {
+			notes.setArchived(false);
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.unarchieved"));
+			return response;
+		
+		}
 	}
 
 	@Override
 	public Response trashAndUnTrash(String token, long noteId) {
-		// TODO Auto-generated method stub
-		return null;
+		long id =userToken.decodeToken(token);
+		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
+		if(notes==null) {
+			throw new UserException(-5,"Invalid input");
+		}
+		if(notes.isTrash()==false) {
+			notes.setTrash(true);
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.trashed"));
+			return response;
+		}else {
+			notes.setTrash(false);
+			notes.setModified(LocalDateTime.now());
+			notesRepository.save(notes);
+			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.untrashed"));
+			return response;
+		
+		}
 	}
+
+
+	@Override
+	public Response colourNote(String colour, String token, long noteId) {
+		long id =userToken.decodeToken(token);
+		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
+		notes.setColour(colour);
+		notesRepository.save(notes);
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.coloured"));
+		return response;
+	}
+
+
+	@Override
+	public Response reminderNote(String reminderDate, String token, long noteId) {
+		long id =userToken.decodeToken(token);
+		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
+		//LocalDateTime today=LocalDateTime.now();
+		notes.setReminder(reminderDate);
+		notesRepository.save(notes);
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.setreminder"));
+		return response;
+	}
+
 
 	
 
-	@Override
-	public List<NotesDto> getArchiveNotes(String token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
-	@Override
-	public List<NotesDto> getTrashNotes(String token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

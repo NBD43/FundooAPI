@@ -25,8 +25,10 @@ public interface NotesService {
 	public Response trashAndUnTrash(String token, long noteId);
 
 	public Response deletePermanently(String token, long noteId);
+	
+	public Response colourNote(String colour, String token, long noteId);
+	
+	public Response reminderNote(String reminderDate, String token, long noteId);
 
-	public List<NotesDto> getArchiveNotes(String token);
-
-	public List<NotesDto> getTrashNotes(String token);
+	
 }

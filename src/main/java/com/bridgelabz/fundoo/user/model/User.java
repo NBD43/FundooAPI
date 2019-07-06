@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.bridgelabz.fundoo.note.dto.NotesDto;
+import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.model.Note;
 
 import lombok.Data;
@@ -33,6 +34,9 @@ public class User {
 	private LocalDateTime registerDate = LocalDateTime.now();
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Note> notes;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Label> label;
 
 	public Long getUserId() {
 		return userId;
@@ -105,6 +109,16 @@ public class User {
 	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
+
+	public List<Label> getLabel() {
+		return label;
+	}
+
+	public void setLabel(List<Label> label) {
+		this.label = label;
+	}
+	
+	
 
 	
 
