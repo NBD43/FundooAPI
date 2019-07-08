@@ -225,6 +225,60 @@ public class NoteServiceImpl implements NotesService {
 	}
 
 
+	@Override
+	public Response addCollabrator(String token, String email, long noteId) {
+		long userId=userToken.decodeToken(token);
+		System.out.println("userId"+userId);
+		Optional<User> mainUser=userRepository.findById(userId);
+		Optional<User> user=userRepository.findByEmailId(email);
+		if(!user.isPresent()) {
+			throw  new UserException(-4,"No user exit");
+		}
+		Note note=notesRepository.findBynoteIdAndUserId(noteId, userId);
+		//Note note = notesRepository.findByUserIdAndNoteId(userId, noteId);
+		System.out.println("note is"+note);
+		if(note==null) {
+			throw new UserException(-5,"No note exist");
+		}
+		if(user.get().getCollabaratedNotes().contains(note)) {
+			throw new UserException(-5,"Note is already collabrated");
+		}
+		
+		user.get().getCollabaratedNotes().add(note);
+		note.getCollaboratedUser().add(user.get());
+		userRepository.save(user.get());
+		notesRepository.save(note);
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.collaborated"));
+		return response;
+	}
+
+
+	@Override
+	public Response removeCollabrator(String token, String email, long noteId) {
+		long userId=userToken.decodeToken(token);
+		Optional<User> mainUser=userRepository.findById(userId);
+		Optional<User> user=userRepository.findByEmailId(email);
+		if(!user.isPresent()) {
+			throw  new UserException(-4,"No user exit");
+		}
+		Note note=notesRepository.findBynoteIdAndUserId(userId, noteId);
+		if(note==null) {
+			throw new UserException(-5,"No note exist");
+		}
+		if(user.get().getCollabaratedNotes().contains(note)) {
+			throw new UserException(-5,"Note is already collabrated");
+		}
+		
+		user.get().getCollabaratedNotes().remove(note);
+		note.getCollaboratedUser().remove(user.get());
+		userRepository.save(user.get());
+		notesRepository.save(note);
+		
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.removecollaborated"));
+		return response;
+	}
+
+
 	
 
 	

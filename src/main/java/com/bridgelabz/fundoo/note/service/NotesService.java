@@ -29,6 +29,10 @@ public interface NotesService {
 	public Response colourNote(String colour, String token, long noteId);
 	
 	public Response reminderNote(String reminderDate, String token, long noteId);
+	
+	public Response addCollabrator(String token,String email,long noteId);
+	
+	public Response removeCollabrator(String token,String email,long noteId);
 
 	
 }

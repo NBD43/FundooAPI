@@ -22,5 +22,10 @@ public interface LabelService {
 	
 
 	public List<LabelDto> getAllLabel(String token);
+	
+	
+	public Response addLabelToNote(long labelId ,String token , long noteId);
+	
+	public Response removeLabelFromNote(long labelId ,String token , long noteId);
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,7 +20,7 @@ import lombok.Data;
 
 @Entity
 @Table
-@Data
+//@Data
 public class User {
 
 	@Id
@@ -37,6 +38,8 @@ public class User {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Label> label;
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Note> collabaratedNotes;
 
 	public Long getUserId() {
 		return userId;
@@ -116,6 +119,14 @@ public class User {
 
 	public void setLabel(List<Label> label) {
 		this.label = label;
+	}
+
+	public List<Note> getCollabaratedNotes() {
+		return collabaratedNotes;
+	}
+
+	public void setCollabaratedNotes(List<Note> collabaratedNotes) {
+		this.collabaratedNotes = collabaratedNotes;
 	}
 	
 	

@@ -2,12 +2,15 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -34,6 +37,8 @@ public class Label implements Serializable {
 	@Column(name="userId")
 	private long userId;
 	
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Note> notes;
 	
 	public long getLabelId() {
 		return labelId;
@@ -65,11 +70,18 @@ public class Label implements Serializable {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	@Override
-	public String toString() {
-		return "Label [labelId=" + labelId + ", labelName=" + labelName + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", userId=" + userId + "]";
+	public List<Note> getNotes() {
+		return notes;
 	}
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+//	@Override
+//	public String toString() {
+//		return "Label [labelId=" + labelId + ", labelName=" + labelName + ", createdDate=" + createdDate
+//				+ ", modifiedDate=" + modifiedDate + ", userId=" + userId + ", notes=" + notes + "]";
+//	}
+	
 	
 	
 	

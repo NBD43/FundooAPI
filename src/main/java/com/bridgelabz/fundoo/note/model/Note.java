@@ -2,14 +2,19 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import com.bridgelabz.fundoo.user.model.User;
 
 @Entity
 @Table
@@ -54,6 +59,30 @@ public class Note implements Serializable {
 	
 	@Column(name="modified")
 	private LocalDateTime modified;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Label> listLabel;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<User> collaboratedUser;
+	
+	
+
+	public List<User> getCollaboratedUser() {
+		return collaboratedUser;
+	}
+
+	public void setCollaboratedUser(List<User> collaboratedUser) {
+		this.collaboratedUser = collaboratedUser;
+	}
+
+	public List<Label> getListLabel() {
+		return listLabel;
+	}
+
+	public void setListLabel(List<Label> listLabel) {
+		this.listLabel = listLabel;
+	}
 
 	public long getNoteId() {
 		return noteId;
@@ -155,13 +184,15 @@ public class Note implements Serializable {
 		return serialVersionUID;
 	}
 
-	@Override
-	public String toString() {
-		return "Note [noteId=" + noteId + ", userId=" + userId + ", title=" + title + ", description=" + description
-				+ ", isTrash=" + isTrash + ", isPined=" + isPined + ", isArchived=" + isArchived + ", colour=" + colour
-				+ ", reminder=" + reminder + ", image=" + image + ", created=" + created + ", modified=" + modified
-				+ "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Note [noteId=" + noteId + ", userId=" + userId + ", title=" + title + ", description=" + description
+//				+ ", isTrash=" + isTrash + ", isPined=" + isPined + ", isArchived=" + isArchived + ", colour=" + colour
+//				+ ", reminder=" + reminder + ", image=" + image + ", created=" + created + ", modified=" + modified
+//				+ ", listLabel=" + listLabel + "]";
+//	}
+
+	
 	
 	
 	

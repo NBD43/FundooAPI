@@ -9,7 +9,7 @@ import com.bridgelabz.fundoo.note.model.Note;
 public interface NotesRepository extends  JpaRepository<Note,Long>{
 	
 	public Note findBynoteIdAndUserId(long Id,long userId);
-	
+	public Note findByUserIdAndNoteId(long userId, long noteId);
 	public List<Note> findByUserId(long userId);
 
 }

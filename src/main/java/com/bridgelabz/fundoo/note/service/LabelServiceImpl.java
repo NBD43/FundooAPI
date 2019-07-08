@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.note.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.note.dto.LabelDto;
 import com.bridgelabz.fundoo.note.model.Label;
+import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.repository.NotesRepository;
 import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.response.Response;
@@ -75,20 +77,125 @@ public class LabelServiceImpl implements LabelService {
 
 	@Override
 	public Response deleteLabel(long labelId, String token) {
-		// TODO Auto-generated method stub
-		return null;
+		long userId = userToken.decodeToken(token);
+		Optional<User> user = userRepository.findById(userId);
+		if(!user.isPresent()) {
+			throw new UserException(-6, "Invalid input");
+		}
+		
+		Label label=labelRepository.findByLabelIdAndUserId(labelId, userId);
+		if(label==null) {
+			throw new UserException(-6,"Invalid Input");
+		}
+		
+		labelRepository.delete(label);
+		
+		
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.label.deleted"));
+		return response;
 	}
 
 	@Override
 	public Response updateLabel(long labelId, String token, LabelDto labelDto) {
-		// TODO Auto-generated method stub
-		return null;
+		long userId = userToken.decodeToken(token);
+		Optional<User> user = userRepository.findById(userId);
+		if(!user.isPresent()) {
+			throw new UserException(-6, "Invalid input");
+		}
+
+		Label label=labelRepository.findByLabelIdAndUserId(labelId, userId);
+		if(label==null) {
+			throw new UserException(-6,"No label exists");
+		}
+		if(labelDto.getLabelName().isEmpty()) {
+			throw new UserException(-6,"label has noName");
+		}
+		
+		Optional<Label> labelAvailablity=labelRepository.findByUserIdAndLabelName(userId, labelDto.getLabelName());
+		if(labelAvailablity.isPresent()) {
+			throw new UserException(-6,"Label already exit");
+		}
+		
+		label.setLabelName(labelDto.getLabelName());
+		label.setModifiedDate(LocalDateTime.now());
+		labelRepository.save(label);
+		
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.label.updated"));
+		return response;
 	}
 
 	@Override
 	public List<LabelDto> getAllLabel(String token) {
-		// TODO Auto-generated method stub
-		return null;
+		long userId = userToken.decodeToken(token);
+		Optional<User> user = userRepository.findById(userId);
+		if(!user.isPresent()) {
+			throw new UserException(-6, "Invalid input");
+		}
+		List<Label> labels=labelRepository.findByUserId(userId);
+		List<LabelDto> listLabel=new ArrayList<>();
+		for(Label noteLabel:labels) {
+			LabelDto labelDto=modelMapper.map(noteLabel,LabelDto.class);
+			listLabel.add(labelDto);
+		}
+		return listLabel;
+	}
+
+	@Override
+	public Response addLabelToNote(long labelId, String token, long noteId) {
+		long userId = userToken.decodeToken(token);
+		Optional<User> user = userRepository.findById(userId);
+		if(!user.isPresent()) {
+			throw new UserException(-6, "Invalid input");
+		}
+
+		Label label=labelRepository.findByLabelIdAndUserId(labelId, userId);
+		if(label==null) {
+			throw new UserException(-6,"No label exists");
+		}
+		Note note=notesRepository.findBynoteIdAndUserId(noteId, userId);
+		if(note==null) {
+			throw new UserException(-6,"No Note  exists");
+		}
+		
+		label.setModifiedDate(LocalDateTime.now());
+		label.getNotes().add(note);
+		note.getListLabel().add(label);
+		note.setModified(LocalDateTime.now());
+		labelRepository.save(label);
+		notesRepository.save(note);
+		
+		
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.label.addedtonote"));
+		return response;
+	}
+
+	@Override
+	public Response removeLabelFromNote(long labelId, String token, long noteId) {
+		long userId = userToken.decodeToken(token);
+		Optional<User> user = userRepository.findById(userId);
+		if(!user.isPresent()) {
+			throw new UserException(-6, "Invalid input");
+		}
+
+		Label label=labelRepository.findByLabelIdAndUserId(labelId, userId);
+		if(label==null) {
+			throw new UserException(-6,"No label exists");
+		}
+		
+		Note note=notesRepository.findBynoteIdAndUserId(noteId, userId);
+		if(note==null) {
+			throw new UserException(-6,"No Note  exists");
+		}
+		
+		label.setModifiedDate(LocalDateTime.now());
+		note.getListLabel().remove(label);
+		note.setModified(LocalDateTime.now());
+		labelRepository.save(label);
+		notesRepository.save(note);
+		
+		
+		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.label.removedfromnote"));
+		return response;
 	}
 
 	

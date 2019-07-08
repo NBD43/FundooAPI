@@ -101,5 +101,21 @@ public class NotesController {
 		Response responseStatus=noteService.reminderNote(reminderDate, token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
+	
+	@PostMapping("/addcolaborator")
+	public ResponseEntity<Response>CollaboratorAdd(@RequestHeader String token,@RequestParam long noteId,@RequestParam String email){
+		//logger.info(notesDto.toString());
+		Response responseStatus=noteService.addCollabrator(token, email, noteId);
+		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/removecollaborator")
+	public ResponseEntity<Response>CollaboratorRemove(@RequestHeader String token,@RequestParam long noteId,@RequestHeader String email){
+		//logger.info(notesDto.toString());
+		Response responseStatus=noteService.removeCollabrator(token, email, noteId);
+		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
+	}
+	
+	
 
 }
