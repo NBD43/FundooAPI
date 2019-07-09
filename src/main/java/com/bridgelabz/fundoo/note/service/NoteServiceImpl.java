@@ -22,6 +22,7 @@ import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepo;
 import com.bridgelabz.fundoo.utility.ResponseHelper;
 import com.bridgelabz.fundoo.utility.TokenGenerator;
+import com.bridgelabz.fundoo.utility.Utility;
 
 @PropertySource("classpath:message.properties")
 @Service("noteService")
@@ -248,6 +249,7 @@ public class NoteServiceImpl implements NotesService {
 		note.getCollaboratedUser().add(user.get());
 		userRepository.save(user.get());
 		notesRepository.save(note);
+		Utility.send(email, "Collaborated Note", note.getTitle()+"colaborated with yoy");
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.collaborated"));
 		return response;
 	}
