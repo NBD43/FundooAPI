@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.NotesDto;
+import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.service.NoteServiceImpl;
 import com.bridgelabz.fundoo.note.service.NotesService;
 import com.bridgelabz.fundoo.response.Response;
@@ -44,51 +45,51 @@ public class NotesController {
 		
 	}
 	@PutMapping("/update")
-	public ResponseEntity<Response> updatingNote(@RequestBody NotesDto notesDto,@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response> updatingNote(@RequestBody NotesDto notesDto,@RequestHeader String token,@RequestParam Long noteId){
 		logger.info(notesDto.toString());
 		Response responseStatus=noteService.updateNote(notesDto, token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	@PutMapping("/delete")
-	public ResponseEntity<Response>deleteNote(@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response>deleteNote(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.delete(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	@DeleteMapping("/delete")
-	public ResponseEntity<Response>deleteNoteFromDisk(@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response>deleteNoteFromDisk(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.deletePermanently(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	@GetMapping("/getAllNotes")
-	public List<NotesDto>getAllNotes(@RequestHeader String token){
-		List<NotesDto> listNotes=noteService.getAllNotes(token);
+	public List<Note>getAllNotes(@RequestHeader String token){
+		List<Note> listNotes=noteService.getAllNotes(token);
 		return listNotes;
 	}
 	
 	@PutMapping("/pin")
-	public ResponseEntity<Response>pinAndUnpin(@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response>pinAndUnpin(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.pinAndUnPin(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	@PutMapping("/archive")
-	public ResponseEntity<Response>archiveAndUnarchive(@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response>archiveAndUnarchive(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.archiveAndUnArchive(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
 	@PutMapping("/trash")
-	public ResponseEntity<Response>trashAndUntrash(@RequestHeader String token,@RequestParam long noteId){
+	public ResponseEntity<Response>trashAndUntrash(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.trashAndUnTrash(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
 	@PutMapping("/colour")
-	public ResponseEntity<Response>noteColour(@RequestHeader String token,@RequestParam long noteId,@RequestHeader String colour){
+	public ResponseEntity<Response>noteColour(@RequestHeader String token,@RequestParam Long noteId,@RequestHeader String colour){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.colourNote(colour, token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
@@ -96,21 +97,21 @@ public class NotesController {
 	
 
 	@PutMapping("/reminder")
-	public ResponseEntity<Response>noteReminder(@RequestHeader String token,@RequestParam long noteId,@RequestHeader String reminderDate){
+	public ResponseEntity<Response>noteReminder(@RequestHeader String token,@RequestParam Long noteId,@RequestHeader String reminderDate){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.reminderNote(reminderDate, token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
 	@PostMapping("/addcolaborator")
-	public ResponseEntity<Response>CollaboratorAdd(@RequestHeader String token,@RequestParam long noteId,@RequestParam String email){
+	public ResponseEntity<Response>CollaboratorAdd(@RequestHeader String token,@RequestParam Long noteId,@RequestParam String email){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.addCollabrator(token, email, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/removecollaborator")
-	public ResponseEntity<Response>CollaboratorRemove(@RequestHeader String token,@RequestParam long noteId,@RequestHeader String email){
+	public ResponseEntity<Response>CollaboratorRemove(@RequestHeader String token,@RequestParam Long noteId,@RequestHeader String email){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.removeCollabrator(token, email, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);

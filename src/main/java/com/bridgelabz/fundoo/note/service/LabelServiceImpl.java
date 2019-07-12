@@ -69,14 +69,14 @@ public class LabelServiceImpl implements LabelService {
 		label.setCreatedDate(LocalDateTime.now());
 		label.setModifiedDate(LocalDateTime.now());
 		labelRepository.save(label);
-		//user.get().getLabel().add(label);
-		//userRepository.save(user.get());
+		user.get().getLabel().add(label);
+		userRepository.save(user.get());
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.label.created"));
 	return response;
 	}
 
 	@Override
-	public Response deleteLabel(long labelId, String token) {
+	public Response deleteLabel(Long labelId, String token) {
 		long userId = userToken.decodeToken(token);
 		Optional<User> user = userRepository.findById(userId);
 		if(!user.isPresent()) {
@@ -87,7 +87,8 @@ public class LabelServiceImpl implements LabelService {
 		if(label==null) {
 			throw new UserException(-6,"Invalid Input");
 		}
-		
+		user.get().getLabel().remove(label);
+		userRepository.save(user.get());
 		labelRepository.delete(label);
 		
 		
@@ -96,7 +97,7 @@ public class LabelServiceImpl implements LabelService {
 	}
 
 	@Override
-	public Response updateLabel(long labelId, String token, LabelDto labelDto) {
+	public Response updateLabel(Long labelId, String token, LabelDto labelDto) {
 		long userId = userToken.decodeToken(token);
 		Optional<User> user = userRepository.findById(userId);
 		if(!user.isPresent()) {
@@ -125,23 +126,14 @@ public class LabelServiceImpl implements LabelService {
 	}
 
 	@Override
-	public List<LabelDto> getAllLabel(String token) {
-		long userId = userToken.decodeToken(token);
-		Optional<User> user = userRepository.findById(userId);
-		if(!user.isPresent()) {
-			throw new UserException(-6, "Invalid input");
-		}
-		List<Label> labels=labelRepository.findByUserId(userId);
-		List<LabelDto> listLabel=new ArrayList<>();
-		for(Label noteLabel:labels) {
-			LabelDto labelDto=modelMapper.map(noteLabel,LabelDto.class);
-			listLabel.add(labelDto);
-		}
-		return listLabel;
+	public List<Label> getAllLabel(String token) {
+		long id =userToken.decodeToken(token);
+		User user =userRepository.findById(id).get();
+		return user.getLabel();
 	}
 
 	@Override
-	public Response addLabelToNote(long labelId, String token, long noteId) {
+	public Response addLabelToNote(Long labelId, String token, Long noteId) {
 		long userId = userToken.decodeToken(token);
 		Optional<User> user = userRepository.findById(userId);
 		if(!user.isPresent()) {
@@ -170,7 +162,7 @@ public class LabelServiceImpl implements LabelService {
 	}
 
 	@Override
-	public Response removeLabelFromNote(long labelId, String token, long noteId) {
+	public Response removeLabelFromNote(Long labelId, String token, Long noteId) {
 		long userId = userToken.decodeToken(token);
 		Optional<User> user = userRepository.findById(userId);
 		if(!user.isPresent()) {

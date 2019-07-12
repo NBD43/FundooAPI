@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.LabelDto;
+import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.service.LabelService;
 import com.bridgelabz.fundoo.response.Response;
 
@@ -43,31 +44,31 @@ public class LabelController {
 	}
 	
 	@DeleteMapping("/delete")
-	ResponseEntity<Response> delete(@RequestParam long labelId, @RequestHeader String token) {
+	ResponseEntity<Response> delete(@RequestParam Long labelId, @RequestHeader String token) {
 		Response statusResponse = labelService.deleteLabel(labelId, token);
 		return new ResponseEntity<Response>(statusResponse,HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("/update")
-	ResponseEntity<Response> updateLabel(@RequestBody LabelDto labelDto , @RequestHeader String token,@RequestParam long labelId) {
+	ResponseEntity<Response> updateLabel(@RequestBody LabelDto labelDto , @RequestHeader String token,@RequestParam Long labelId) {
 		Response statusResponse = labelService.updateLabel(labelId, token, labelDto);
 		return new ResponseEntity<Response>(statusResponse,HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/getlabel")
-	List<LabelDto> getLabel(@RequestHeader String token){
-		List<LabelDto> listLabel = labelService.getAllLabel(token);
+	List<Label> getLabel(@RequestHeader String token){
+		List<Label> listLabel = labelService.getAllLabel(token);
 		return listLabel;
 	}
 	
 	@PutMapping("/addlabeltonote")
-	ResponseEntity<Response> addNoteToLabels(@RequestParam long labelId , @RequestHeader String token , @RequestParam long noteId){
+	ResponseEntity<Response> addNoteToLabels(@RequestParam Long labelId , @RequestHeader String token , @RequestParam Long noteId){
 		Response statusResponse = labelService.addLabelToNote(labelId, token, noteId);
 		return new ResponseEntity<Response>(statusResponse,HttpStatus.OK);
 	}
 	
 	@PutMapping("/removelabelfromnote")
-	ResponseEntity<Response> removeNoteToLabels(@RequestParam long labelId , @RequestHeader String token , @RequestParam long noteId){
+	ResponseEntity<Response> removeNoteToLabels(@RequestParam Long labelId , @RequestHeader String token , @RequestParam Long noteId){
 		Response statusResponse = labelService.removeLabelFromNote(labelId, token, noteId);
 		return new ResponseEntity<Response>(statusResponse,HttpStatus.OK);
 	}

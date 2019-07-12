@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.note.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,9 +60,9 @@ public class NoteServiceImpl implements NotesService {
 		notes.setUserId(id);
 		notes.setCreated(LocalDateTime.now());
 		notes.setModified(LocalDateTime.now());
-		//user.get().getNotes().add(notes);
+		user.get().getNotes().add(notes);
 		notesRepository.save(notes);
-		//userRepository.save(user.get());
+		userRepository.save(user.get());
 		
 		
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.createdSuccessfull"));
@@ -73,7 +74,7 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response updateNote(NotesDto notesDto, String token, long noteId) {
+	public Response updateNote(NotesDto notesDto, String token, Long noteId) {
 		if(notesDto.getTitle().isEmpty() && notesDto.getDescription().isEmpty()) {
 			throw new UserException(-5,"Title and discriptions are empty");
 		}
@@ -88,7 +89,7 @@ public class NoteServiceImpl implements NotesService {
 	}
 
 	@Override
-	public Response delete(String token, long noteId) {
+	public Response delete(String token, Long noteId) {
 		long id=userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		if(notes==null) {
@@ -105,36 +106,41 @@ public class NoteServiceImpl implements NotesService {
 	}
 	
 	@Override
-	public Response deletePermanently(String token, long noteId) {
+	public Response deletePermanently(String token, Long noteId) {
 		long id =userToken.decodeToken(token);
-		Note notes=notesRepository.findById(noteId).orElseThrow();
-		System.out.println(notes);
-		if(notes.isTrash()==true) {
-			notesRepository.delete(notes);
+		Optional<User> user=userRepository.findById(id);
+		Note note=notesRepository.findById(noteId).orElseThrow();
+		System.out.println(note);
+		if(note.isTrash()==true) {
+			user.get().getNotes().remove(note);
+			userRepository.save(user.get());
+			notesRepository.delete(note);
 			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.deleted"));
 			return response;
-		}
+		}else {
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.notdeleted"));
 		return response;
-	}
-
-	@Override
-	public List<NotesDto> getAllNotes(String token) {
-		long id =userToken.decodeToken(token);
-		List<Note> notes=(List<Note>)notesRepository.findByUserId(id);
-		List<NotesDto> listNotes=new ArrayList<NotesDto>();
-		for(Note userNotes:notes) {
-			NotesDto noteDto=modelMapper.map(userNotes,NotesDto.class);
-			if(userNotes.isArchived()==false && userNotes.isTrash()==false) {
-				listNotes.add(noteDto);
-			}
 		}
-		
-		return listNotes;
 	}
 
 	@Override
-	public Response pinAndUnPin(String token, long noteId) {
+	public List<Note> getAllNotes(String token) {
+		long id =userToken.decodeToken(token);
+		User user =userRepository.findById(id).get();
+		
+//		List<NotesDto> listNotes=new ArrayList<NotesDto>();
+//		for(Note userNotes:notes) {
+//			NotesDto noteDto=modelMapper.map(userNotes,NotesDto.class);
+//			if(userNotes.isArchived()==false && userNotes.isTrash()==false) {
+//				listNotes.add(noteDto);
+//			}
+
+		
+		return user.getNotes();
+	}
+
+	@Override
+	public Response pinAndUnPin(String token, Long noteId) {
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		if(notes==null) {
@@ -157,7 +163,7 @@ public class NoteServiceImpl implements NotesService {
 	}
            
 	@Override
-	public Response archiveAndUnArchive(String token, long noteId) {
+	public Response archiveAndUnArchive(String token, Long noteId) {
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		if(notes==null) {
@@ -180,7 +186,7 @@ public class NoteServiceImpl implements NotesService {
 	}
 
 	@Override
-	public Response trashAndUnTrash(String token, long noteId) {
+	public Response trashAndUnTrash(String token, Long noteId) {
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		if(notes==null) {
@@ -204,7 +210,7 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response colourNote(String colour, String token, long noteId) {
+	public Response colourNote(String colour, String token, Long noteId) {
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		notes.setColour(colour);
@@ -215,10 +221,15 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response reminderNote(String reminderDate, String token, long noteId) {
+	public Response reminderNote(String reminderDate, String token, Long noteId) {
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
-		//LocalDateTime today=LocalDateTime.now();
+		LocalDateTime today=LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime remind=LocalDateTime.parse(reminderDate, formatter);
+		if(today.isBefore(remind)) {
+			throw new UserException(-6,"date is before the orignal time");
+		}
 		notes.setReminder(reminderDate);
 		notesRepository.save(notes);
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.setreminder"));
@@ -227,7 +238,7 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response addCollabrator(String token, String email, long noteId) {
+	public Response addCollabrator(String token, String email, Long noteId) {
 		long userId=userToken.decodeToken(token);
 		System.out.println("userId"+userId);
 		Optional<User> mainUser=userRepository.findById(userId);
@@ -256,7 +267,7 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response removeCollabrator(String token, String email, long noteId) {
+	public Response removeCollabrator(String token, String email, Long noteId) {
 		long userId=userToken.decodeToken(token);
 		Optional<User> mainUser=userRepository.findById(userId);
 		Optional<User> user=userRepository.findByEmailId(email);

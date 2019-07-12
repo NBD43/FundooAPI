@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.user.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.MessagingException;
 
@@ -22,6 +23,8 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.response.ResponseToken;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
+import com.bridgelabz.fundoo.user.model.User;
+import com.bridgelabz.fundoo.user.repository.UserRepo;
 import com.bridgelabz.fundoo.user.service.UserService;
 
 
@@ -32,6 +35,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	UserRepo userRepo;
+	
 	@PostMapping("/register")
 	public ResponseEntity<Response> register(@RequestBody UserDTO userDto)
 			throws UserException, UnsupportedEncodingException {
@@ -50,7 +56,7 @@ public class UserController {
 	}
 
 	// to verify
-	@GetMapping(value = "/user/{token}/valid")
+	@GetMapping(value = "/{token}/valid")
 	public ResponseEntity<Response> emailValidation(@PathVariable String token) throws UserException {
 
 		Response response = userService.validateEmailId(token);
@@ -58,7 +64,7 @@ public class UserController {
 	}
 
 	// for forget password
-	@PostMapping("/user/forgetpassword")
+	@PostMapping("/forgetpassword")
 	public ResponseEntity<Response> forgotPassword(@RequestParam String emailId)
 			throws UnsupportedEncodingException, UserException, MessagingException {
 		System.out.println(emailId);
@@ -68,12 +74,16 @@ public class UserController {
 
 	}
 
-	@PutMapping(value = "/user/resetpassword")
+	@PutMapping(value = "/resetpassword")
 	public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam("password") String password)
 			throws UserException {
 		Response response = userService.resetPaswords(token, password);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 
+	}
+	@GetMapping("/getallusers")
+	public List<User> getAllUsers(){
+		return userRepo.findAll();
 	}
 
 }
