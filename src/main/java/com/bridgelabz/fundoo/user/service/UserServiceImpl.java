@@ -151,6 +151,26 @@ public class UserServiceImpl implements UserService {
 		return ResponseHelper.statusResponse(200, "password successfully reset");
 	}
 
+
+
+	@Override
+	public Response addProfile(String token, String path) throws UserException {
+		long id=tokenUtil.decodeToken(token);
+		User user=userRepo.findById(id).orElseThrow(()-> new UserException(404,"user is not found"));
+		user.setProfile(path);
+		userRepo.save(user);
+		return ResponseHelper.statusResponse(200, "profile updated successfully");
+	}
+
+
+
+	@Override
+	public String getProfile(String token) throws UserException {
+		long id=tokenUtil.decodeToken(token);
+		User user=userRepo.findById(id).orElseThrow(()-> new UserException(404,"user is not found"));
+		return user.getProfile();
+	}
+
 	
 
 	

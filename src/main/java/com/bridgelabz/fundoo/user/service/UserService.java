@@ -21,6 +21,11 @@ public interface UserService {
 	 * to verify valid emailId
 	 */
 	Response validateEmailId(String token) throws UserException;
+	
+	Response addProfile(String token,String path) throws UserException;
+	
+	String getProfile(String token) throws UserException;
+
 
 	/**
 	 * to send forget password link

@@ -85,5 +85,18 @@ public class UserController {
 	public List<User> getAllUsers(){
 		return userRepo.findAll();
 	}
+	
+	@GetMapping("/getprofile")
+	public String getprofile(@RequestParam String token){
+		String path=userService.getProfile(token);
+		return path;
+	}
+	@PutMapping("/addprofile")
+	public ResponseEntity<?> addProfile(@RequestParam String token, @RequestParam String path)
+			throws UserException {
+		Response response = userService.addProfile(token, path);
+		return new ResponseEntity<Response>(response, HttpStatus.OK);
+
+	}
 
 }

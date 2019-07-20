@@ -35,6 +35,7 @@ public class User {
 	private String mobileNum;
 	private boolean isVerify;
 	private LocalDateTime registerDate = LocalDateTime.now();
+	private String profile;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Note> notes;
