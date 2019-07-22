@@ -3,7 +3,9 @@ package com.bridgelabz.fundoo.user.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
@@ -25,6 +27,9 @@ public interface UserService {
 	Response addProfile(String token,String path) throws UserException;
 	
 	String getProfile(String token) throws UserException;
+	
+	public Response uploadProfilePic(String token,MultipartFile picture);
+	public Resource getProfilePic(String token);
 
 
 	/**

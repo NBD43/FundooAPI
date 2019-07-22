@@ -6,6 +6,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
@@ -86,15 +88,16 @@ public class UserController {
 		return userRepo.findAll();
 	}
 	
-	@GetMapping("/getprofile")
-	public String getprofile(@RequestParam String token){
-		String path=userService.getProfile(token);
-		return path;
+	@GetMapping("/getprofilepic/{token}")
+	public Resource getProfilePic(@PathVariable("token") String token){
+		Resource resource=userService.getProfilePic(token);
+		return resource;
 	}
-	@PutMapping("/addprofile")
-	public ResponseEntity<?> addProfile(@RequestParam String token, @RequestParam String path)
+	@PutMapping("/uploadprofile")
+	public ResponseEntity<?> addProfile(@RequestParam String token, @RequestParam MultipartFile picture)
 			throws UserException {
-		Response response = userService.addProfile(token, path);
+		Response response=userService.uploadProfilePic(token, picture);
+		
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
 
 	}

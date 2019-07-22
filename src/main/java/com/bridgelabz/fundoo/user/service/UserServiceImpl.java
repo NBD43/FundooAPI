@@ -1,15 +1,28 @@
 package com.bridgelabz.fundoo.user.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.Files;
 import java.util.Optional;
+import java.util.UUID;
+
+import javax.tools.JavaFileManager.Location;
+
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
@@ -25,9 +38,12 @@ import com.bridgelabz.fundoo.utility.Utility;
 
 
 
+
 @PropertySource("classpath:message.properties")
 @Service("userService")
 public class UserServiceImpl implements UserService {
+	Path location=Paths.get("/home/bridgeit/NBD43/profilePic");
+	//String location="/home/bridgeit/NBD43/profilePic";
 
 	@Autowired
 	private UserRepo userRepo;
@@ -169,6 +185,45 @@ public class UserServiceImpl implements UserService {
 		long id=tokenUtil.decodeToken(token);
 		User user=userRepo.findById(id).orElseThrow(()-> new UserException(404,"user is not found"));
 		return user.getProfile();
+	}
+
+
+
+	@Override
+	public Response uploadProfilePic(String token, MultipartFile picture) {
+		long userId=tokenUtil.decodeToken(token);
+		User user=userRepo.findById(userId).orElseThrow(()-> new UserException(404,"user is not found"));
+		UUID uuid=UUID.randomUUID();
+		String id=uuid.toString();
+		try {
+			Files.copy(picture.getInputStream(), location.resolve(id),StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		user.setProfile(id);
+		userRepo.save(user);
+		return ResponseHelper.statusResponse(200, "profile updated successfully");
+	}
+
+
+
+	@Override
+	public Resource getProfilePic(String token) {
+		long userId=tokenUtil.decodeToken(token);
+		User user=userRepo.findById(userId).orElseThrow(()-> new UserException(404,"user is not found"));
+		Path url=location.resolve(user.getProfile());
+		try {
+			
+			Resource resource=new UrlResource(url.toUri());
+			return resource;
+		}
+		catch(MalformedURLException e){
+			e.printStackTrace();
+			
+		}
+		return null;
 	}
 
 	
