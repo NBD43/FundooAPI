@@ -65,7 +65,7 @@ public class NoteServiceImpl implements NotesService {
 		userRepository.save(user.get());
 		
 		
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.createdSuccessfull"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.createdSuccessfull"));
 		return response;
 		
 		
@@ -84,7 +84,7 @@ public class NoteServiceImpl implements NotesService {
 		notes.setDescription(notesDto.getDescription());
 		notes.setModified(LocalDateTime.now());
 		notesRepository.save(notes);
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.updated"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.updated"));
 		return response;
 	}
 
@@ -99,7 +99,7 @@ public class NoteServiceImpl implements NotesService {
 			notes.setTrash(true);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.trashed"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.trashed"));
 		}
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.trashError"));
 		return response;
@@ -115,7 +115,7 @@ public class NoteServiceImpl implements NotesService {
 			user.get().getNotes().remove(note);
 			userRepository.save(user.get());
 			notesRepository.delete(note);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.deleted"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.deleted"));
 			return response;
 		}else {
 		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.notdeleted"));
@@ -150,13 +150,13 @@ public class NoteServiceImpl implements NotesService {
 			notes.setPined(true);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.pinned"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.pinned"));
 			return response;
 		}else {
 			notes.setPined(false);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.unpinned"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.unpinned"));
 			return response;
 		
 		}
@@ -196,13 +196,13 @@ public class NoteServiceImpl implements NotesService {
 			notes.setTrash(true);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.trashed"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.trashed"));
 			return response;
 		}else {
 			notes.setTrash(false);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.untrashed"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.untrashed"));
 			return response;
 		
 		}
@@ -215,7 +215,7 @@ public class NoteServiceImpl implements NotesService {
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		notes.setColour(colour);
 		notesRepository.save(notes);
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.coloured"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.coloured"));
 		return response;
 	}
 
@@ -232,7 +232,7 @@ public class NoteServiceImpl implements NotesService {
 		}
 		notes.setReminder(reminderDate);
 		notesRepository.save(notes);
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.notes.setreminder"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.setreminder"));
 		return response;
 	}
 
@@ -261,7 +261,7 @@ public class NoteServiceImpl implements NotesService {
 		userRepository.save(user.get());
 		notesRepository.save(note);
 		Utility.send(email, "Collaborated Note", note.getTitle()+"colaborated with yoy");
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.collaborated"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.collaborated"));
 		return response;
 	}
 
@@ -287,7 +287,7 @@ public class NoteServiceImpl implements NotesService {
 		userRepository.save(user.get());
 		notesRepository.save(note);
 		
-		Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.removecollaborated"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.removecollaborated"));
 		return response;
 	}
 

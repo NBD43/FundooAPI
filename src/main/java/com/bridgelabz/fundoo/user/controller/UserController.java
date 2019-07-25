@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,15 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.response.ResponseToken;
+import com.bridgelabz.fundoo.user.dto.EmailDTO;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepo;
 import com.bridgelabz.fundoo.user.service.UserService;
 
-
-@RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
+@RestController
 @RequestMapping("/user")
 public class UserController {
 	@Autowired
@@ -67,10 +69,10 @@ public class UserController {
 
 	// for forget password
 	@PostMapping("/forgetpassword")
-	public ResponseEntity<Response> forgotPassword(@RequestParam String emailId)
+	public ResponseEntity<Response> forgotPassword(@RequestBody EmailDTO emailDto)
 			throws UnsupportedEncodingException, UserException, MessagingException {
-		System.out.println(emailId);
-		Response status = userService.forgetPassword(emailId);
+		System.out.println(emailDto);
+		Response status = userService.forgetPassword(emailDto);
 
 		return new ResponseEntity<Response>(status, HttpStatus.OK);
 
@@ -93,8 +95,8 @@ public class UserController {
 		Resource resource=userService.getProfilePic(token);
 		return resource;
 	}
-	@PutMapping("/uploadprofile")
-	public ResponseEntity<?> addProfile(@RequestParam String token, @RequestParam MultipartFile picture)
+	@PutMapping(value="/uploadprofile",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> addProfile(@RequestHeader(value="token") String token, @RequestParam("File") MultipartFile picture)
 			throws UserException {
 		Response response=userService.uploadProfilePic(token, picture);
 		

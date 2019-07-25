@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.response.ResponseToken;
+import com.bridgelabz.fundoo.user.dto.EmailDTO;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
@@ -35,7 +36,7 @@ public interface UserService {
 	/**
 	 * to send forget password link
 	 */
-	Response forgetPassword(String emailId) throws UserException, UnsupportedEncodingException;
+	Response forgetPassword(EmailDTO emailDto) throws UserException, UnsupportedEncodingException;
 
 	/**
 	 * use to reset already register user password

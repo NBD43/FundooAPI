@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridgelabz.fundoo.exception.UserException;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.response.ResponseToken;
+import com.bridgelabz.fundoo.user.dto.EmailDTO;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.UserDTO;
 import com.bridgelabz.fundoo.user.model.User;
@@ -144,13 +145,13 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public Response forgetPassword(String emailId) throws UserException, UnsupportedEncodingException {
-		Optional<User> alreadyPresent=userRepo.findByEmailId(emailId);
+	public Response forgetPassword(EmailDTO emailDto) throws UserException, UnsupportedEncodingException {
+		Optional<User> alreadyPresent=userRepo.findByEmailId(emailDto.getEmailId());
 		if(!alreadyPresent.isPresent()) {
 			throw new UserException(401,environment.getProperty("user.forgetPassword.emailId"));
 		}
 		long id=alreadyPresent.get().getUserId();
-		Utility.send(emailId, "password reset mail", Utility.getUrl(id));
+		Utility.send(emailDto.getEmailId(), "password reset mail", Utility.getUrl(id));
 		return ResponseHelper.statusResponse(200, environment.getProperty("user.forgetpassword.link"));
 	}
 
