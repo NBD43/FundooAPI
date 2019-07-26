@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.note.dto.ColorDto;
 import com.bridgelabz.fundoo.note.dto.NotesDto;
 import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.response.Response;
@@ -27,7 +28,7 @@ public interface NotesService {
 
 	public Response deletePermanently(String token, Long noteId);
 	
-	public Response colourNote(String colour, String token, Long noteId);
+	public Response colourNote( String token, ColorDto colorDto);
 	
 	public Response reminderNote(String reminderDate, String token, Long noteId);
 	

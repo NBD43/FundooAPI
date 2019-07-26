@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.fundoo.note.dto.ColorDto;
 import com.bridgelabz.fundoo.note.dto.NotesDto;
 import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.service.NoteServiceImpl;
@@ -91,9 +92,9 @@ public class NotesController {
 	}
 	
 	@PutMapping("/colour")
-	public ResponseEntity<Response>noteColour(@RequestHeader String token,@RequestParam Long noteId,@RequestHeader String colour){
+	public ResponseEntity<Response>noteColour(@RequestHeader String token,@RequestBody ColorDto colorDto){
 		//logger.info(notesDto.toString());
-		Response responseStatus=noteService.colourNote(colour, token, noteId);
+		Response responseStatus=noteService.colourNote(token, colorDto);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	

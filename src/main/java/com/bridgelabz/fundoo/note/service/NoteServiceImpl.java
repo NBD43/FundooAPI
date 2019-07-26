@@ -15,6 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.UserException;
+import com.bridgelabz.fundoo.note.dto.ColorDto;
 import com.bridgelabz.fundoo.note.dto.NotesDto;
 import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.repository.NotesRepository;
@@ -210,12 +211,12 @@ public class NoteServiceImpl implements NotesService {
 
 
 	@Override
-	public Response colourNote(String colour, String token, Long noteId) {
+	public Response colourNote(String token,ColorDto colorDto) {
 		long id =userToken.decodeToken(token);
-		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
-		notes.setColour(colour);
+		Note notes=notesRepository.findBynoteIdAndUserId(colorDto.getNoteId(), id);
+		notes.setColour(colorDto.getColor());
 		notesRepository.save(notes);
-		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.coloured"));
+		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.notes.colour"));
 		return response;
 	}
 
