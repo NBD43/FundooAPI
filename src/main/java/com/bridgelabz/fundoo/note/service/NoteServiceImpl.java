@@ -174,13 +174,13 @@ public class NoteServiceImpl implements NotesService {
 			notes.setArchived(true);;
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.archieved"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.archieved"));
 			return response;
 		}else {
 			notes.setArchived(false);
 			notes.setModified(LocalDateTime.now());
 			notesRepository.save(notes);
-			Response response=ResponseHelper.statusResponse(100, environment.getProperty("status.note.unarchieved"));
+			Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.unarchieved"));
 			return response;
 		
 		}
@@ -188,6 +188,7 @@ public class NoteServiceImpl implements NotesService {
 
 	@Override
 	public Response trashAndUnTrash(String token, Long noteId) {
+		System.out.println(token+"......"+noteId);
 		long id =userToken.decodeToken(token);
 		Note notes=notesRepository.findBynoteIdAndUserId(noteId, id);
 		if(notes==null) {
@@ -293,7 +294,24 @@ public class NoteServiceImpl implements NotesService {
 	}
 
 
-	
+	@Override
+	public List<NotesDto> getAllArchive(String token) {
+		
+		long id =userToken.decodeToken(token);
+		List<Note> notes=(List<Note>)notesRepository.findByUserId(id);
+
+		List<NotesDto> listNotes=new ArrayList<NotesDto>();
+		for(Note userNotes:notes) {
+			NotesDto noteDto=modelMapper.map(userNotes,NotesDto.class);
+			if(userNotes.isArchived()==true && userNotes.isTrash()==false) {
+				listNotes.add(noteDto);
+			}
+		
+	}
+
+
+		return listNotes;
+	}
 
 	
 

@@ -36,5 +36,7 @@ public interface NotesService {
 	
 	public Response removeCollabrator(String token,String email,Long noteId);
 
+	public List<NotesDto> getAllArchive(String token);
+
 	
 }

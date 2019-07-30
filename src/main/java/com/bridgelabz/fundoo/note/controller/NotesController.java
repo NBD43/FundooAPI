@@ -71,23 +71,30 @@ public class NotesController {
 		return listNotes;
 	}
 	
+	@GetMapping("/getAllArchive")
+	public List<NotesDto> getAllArchive(@RequestHeader String token){
+		List<NotesDto> listNotes=noteService.getAllArchive(token);
+		return listNotes;
+	}
 	@PutMapping("/pin")
 	public ResponseEntity<Response>pinAndUnpin(@RequestHeader String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.pinAndUnPin(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
-	@PutMapping("/archive")
-	public ResponseEntity<Response>archiveAndUnarchive(@RequestHeader String token,@RequestParam Long noteId){
+	@PutMapping(value = "/archive")
+	public ResponseEntity<Response>archiveAndUnarchive(@RequestBody Note note,@RequestHeader(value = "token")  String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
+		System.out.println("token-->"+token);
 		Response responseStatus=noteService.archiveAndUnArchive(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
-	@PutMapping("/trash")
-	public ResponseEntity<Response>trashAndUntrash(@RequestHeader String token,@RequestParam Long noteId){
+	@PutMapping(value = "/trash")
+	public ResponseEntity<Response>trashAndUntrash(@RequestHeader(value="token") String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.trashAndUnTrash(token, noteId);
+		
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
 	}
 	
