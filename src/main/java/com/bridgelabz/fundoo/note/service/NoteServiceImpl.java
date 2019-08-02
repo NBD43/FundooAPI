@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -294,26 +295,63 @@ public class NoteServiceImpl implements NotesService {
 	}
 
 
-	@Override
-	public List<NotesDto> getAllArchive(String token) {
-		
-		long id =userToken.decodeToken(token);
-		List<Note> notes=(List<Note>)notesRepository.findByUserId(id);
-
-		List<NotesDto> listNotes=new ArrayList<NotesDto>();
-		for(Note userNotes:notes) {
-			NotesDto noteDto=modelMapper.map(userNotes,NotesDto.class);
-			if(userNotes.isArchived()==true && userNotes.isTrash()==false) {
-				listNotes.add(noteDto);
-			}
-		
-	}
-
-
-		return listNotes;
-	}
-
 	
+
+
+	@Override
+	public List<Note> getAllArchive(String token) {
+		long userId = userToken.decodeToken(token);
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserException("No note is available"));
+		List<Note> archieveNote = user.getNotes().stream().filter(data -> (data.isArchived() == true && data.isTrash() == false) )
+				.collect(Collectors.toList());
+
+		user.getNotes().stream().filter(data1 -> (data1.isArchived() == true)).collect(Collectors.toList())
+				.forEach(System.out::println);
+		return archieveNote;
+	}
+	
+	
+	@Override
+	public List<Note> getNotes(String token) {
+		long userId = userToken.decodeToken(token);
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserException("No note is available"));
+		List<Note> archieveNote = user.getNotes().stream().filter(data -> (data.isArchived() == false && data.isTrash() == false && data.isPined()==false ) )
+				.collect(Collectors.toList());
+
+		user.getNotes().stream().filter(data1 -> (data1.isArchived() == false)).collect(Collectors.toList())
+				.forEach(System.out::println);
+		return archieveNote;
+	}
+	
+	
+	@Override
+	public List<Note> getTrashNotes(String token) {
+		long userId = userToken.decodeToken(token);
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserException("No note is available"));
+		List<Note> archieveNote = user.getNotes().stream().filter(data -> (data.isTrash() == true) )
+				.collect(Collectors.toList());
+
+		user.getNotes().stream().filter(data1 -> (data1.isTrash() == true)).collect(Collectors.toList())
+				.forEach(System.out::println);
+		return archieveNote;
+	}
+	
+	
+	@Override
+	public List<Note> getPinnedNotes(String token) {
+		long userId = userToken.decodeToken(token);
+
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserException("No note is available"));
+		List<Note> archieveNote = user.getNotes().stream().filter(data -> (data.isArchived() == false && data.isTrash() == false && data.isPined()==true) )
+				.collect(Collectors.toList());
+
+		user.getNotes().stream().filter(data1 -> (data1.isPined()==true)).collect(Collectors.toList())
+				.forEach(System.out::println);
+		return archieveNote;
+	}
 
 	
 

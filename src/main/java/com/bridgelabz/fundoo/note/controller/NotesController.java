@@ -71,13 +71,9 @@ public class NotesController {
 		return listNotes;
 	}
 	
-	@GetMapping("/getAllArchive")
-	public List<NotesDto> getAllArchive(@RequestHeader String token){
-		List<NotesDto> listNotes=noteService.getAllArchive(token);
-		return listNotes;
-	}
+	
 	@PutMapping("/pin")
-	public ResponseEntity<Response>pinAndUnpin(@RequestHeader String token,@RequestParam Long noteId){
+	public ResponseEntity<Response>pinAndUnpin(@RequestHeader(value="token") String token,@RequestParam Long noteId){
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.pinAndUnPin(token, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
@@ -125,6 +121,30 @@ public class NotesController {
 		//logger.info(notesDto.toString());
 		Response responseStatus=noteService.removeCollabrator(token, email, noteId);
 		return new ResponseEntity<Response>(responseStatus,HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllArchive")
+	public List<Note>getAllArchive(@RequestHeader String token){
+		List<Note> listNotes=noteService.getAllArchive(token);
+		return listNotes;
+	}
+
+	@GetMapping("/notes")
+	public List<Note>getNoArchiveNote(@RequestHeader String token){
+		List<Note> listNotes=noteService.getNotes(token);
+		return listNotes;
+	}
+	
+	@GetMapping("/trashNotes")
+	public List<Note>getTrashNote(@RequestHeader String token){
+		List<Note> listNotes=noteService.getTrashNotes(token);
+		return listNotes;
+	}
+	
+	@GetMapping("/pinnedNotes")
+	public List<Note>getPinnedNote(@RequestHeader String token){
+		List<Note> listNotes=noteService.getPinnedNotes(token);
+		return listNotes;
 	}
 	
 	
