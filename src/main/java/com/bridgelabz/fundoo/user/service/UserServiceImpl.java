@@ -60,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private Response statusResponse;
+	
+	@Autowired
+	private Utility utility;
 
 	@Autowired
 	private Environment environment;
@@ -82,7 +85,8 @@ public class UserServiceImpl implements UserService {
 		user = userRepo.save(user);
 		Long userId = user.getUserId();
 		// System.out.println(emailid + " " + userId);
-		Utility.send(emailid, "confirmation mail", Utility.getUrl(userId) + "/valid");
+		System.out.println(emailid+"confirmation mail"+utility.getUrl(userId) + "/valid");
+		utility.send(emailid, "confirmation mail", utility.getUrl(userId) + "/valid");
 
 		statusResponse = ResponseHelper.statusResponse(200, "register successfully");
 		return statusResponse;
@@ -151,7 +155,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserException(401,environment.getProperty("user.forgetPassword.emailId"));
 		}
 		long id=alreadyPresent.get().getUserId();
-		Utility.send(emailDto.getEmailId(), "password reset mail", Utility.getUrl(id));
+		utility.send(emailDto.getEmailId(), "password reset mail", utility.getUrl(id));
 		return ResponseHelper.statusResponse(200, environment.getProperty("user.forgetpassword.link"));
 	}
 

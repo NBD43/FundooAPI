@@ -43,6 +43,9 @@ public class NoteServiceImpl implements NotesService {
 
 	@Autowired
 	private NotesRepository notesRepository;
+	
+	@Autowired
+	private Utility utility;
 
 	@Autowired
 	private Environment environment;
@@ -263,7 +266,7 @@ public class NoteServiceImpl implements NotesService {
 		note.getCollaboratedUser().add(user.get());
 		userRepository.save(user.get());
 		notesRepository.save(note);
-		Utility.send(email, "Collaborated Note", note.getTitle()+"colaborated with yoy");
+		utility.send(email, "Collaborated Note", note.getTitle()+"colaborated with yoy");
 		Response response=ResponseHelper.statusResponse(200, environment.getProperty("status.note.collaborated"));
 		return response;
 	}
